@@ -1,0 +1,782 @@
+/* ============================================
+   LIGA DOS LEITORES — Estilos globais
+   ============================================ */
+
+:root {
+    --bg-deep: #0a0514;
+    --bg-dark: #1a0f2e;
+    --bg-mid: #2a1a4a;
+    --bg-light: #3d2a5f;
+    --surface: #221238;
+    --surface-elev: #2d1a4a;
+    --border: rgba(255, 255, 255, 0.08);
+    --border-strong: rgba(255, 255, 255, 0.15);
+
+    --gold: #f0c060;
+    --gold-dark: #c08030;
+    --gold-light: #ffd97a;
+    --purple: #9333ea;
+    --purple-light: #c084fc;
+    --crimson: #dc2626;
+    --crimson-light: #f87171;
+    --emerald: #10b981;
+    --emerald-light: #34d399;
+    --azure: #3b82f6;
+    --azure-light: #60a5fa;
+
+    --text: #f5f0e8;
+    --text-muted: #a89cb5;
+    --text-dim: #6a5c7d;
+
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.6);
+    --shadow-glow: 0 0 40px rgba(240, 192, 96, 0.4);
+
+    --font-display: 'Cinzel', 'Georgia', serif;
+    --font-fantasy: 'MedievalSharp', 'Cinzel', serif;
+    --font-body: 'Inter', -apple-system, 'Segoe UI', sans-serif;
+
+    --radius-sm: 6px;
+    --radius-md: 12px;
+    --radius-lg: 20px;
+    --radius-xl: 28px;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+    height: 100%;
+    overflow: hidden;
+    overscroll-behavior: none;
+}
+
+body {
+    font-family: var(--font-body);
+    color: var(--text);
+    background: var(--bg-deep);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+}
+
+#app {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* ============================================
+   TELAS
+   ============================================ */
+.screen {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.4s ease, visibility 0.4s;
+    display: flex;
+    flex-direction: column;
+}
+
+.screen.active {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+/* ============================================
+   LOADING SCREEN
+   ============================================ */
+#loading-screen {
+    background: radial-gradient(ellipse at center, #2a1a4a 0%, #0a0514 70%);
+    align-items: center;
+    justify-content: center;
+}
+
+.loading-content {
+    text-align: center;
+    animation: fadeInUp 0.8s ease;
+}
+
+.loading-logo {
+    animation: float 3s ease-in-out infinite;
+    margin-bottom: 24px;
+    filter: drop-shadow(0 0 20px rgba(240, 192, 96, 0.6));
+}
+
+.loading-title {
+    font-family: var(--font-display);
+    font-size: 42px;
+    font-weight: 900;
+    color: var(--gold);
+    letter-spacing: 3px;
+    margin-bottom: 8px;
+    text-shadow: 0 0 20px rgba(240, 192, 96, 0.5);
+}
+
+.loading-subtitle {
+    color: var(--text-muted);
+    font-size: 14px;
+    margin-bottom: 32px;
+}
+
+.loading-bar {
+    width: 240px;
+    height: 4px;
+    background: var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    margin: 0 auto;
+}
+
+.loading-progress {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--gold-dark), var(--gold), var(--gold-light));
+    animation: loading 2s ease-out forwards;
+    box-shadow: 0 0 10px var(--gold);
+}
+
+@keyframes loading {
+    to { width: 100%; }
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ============================================
+   LOGIN SCREEN
+   ============================================ */
+#login-screen {
+    position: relative;
+    overflow: hidden;
+}
+
+.login-backdrop {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+        radial-gradient(ellipse at 20% 30%, rgba(147, 51, 234, 0.3) 0%, transparent 40%),
+        radial-gradient(ellipse at 80% 70%, rgba(240, 192, 96, 0.2) 0%, transparent 40%),
+        linear-gradient(135deg, #0a0514 0%, #1a0f2e 50%, #2a1a4a 100%);
+}
+
+.login-backdrop::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+        radial-gradient(2px 2px at 20% 30%, white, transparent),
+        radial-gradient(1px 1px at 60% 70%, white, transparent),
+        radial-gradient(1px 1px at 40% 20%, white, transparent),
+        radial-gradient(2px 2px at 80% 50%, white, transparent),
+        radial-gradient(1px 1px at 90% 80%, white, transparent),
+        radial-gradient(1px 1px at 10% 90%, white, transparent),
+        radial-gradient(2px 2px at 30% 60%, white, transparent);
+    background-size: 300px 300px;
+    opacity: 0.4;
+    animation: twinkle 4s ease-in-out infinite;
+}
+
+@keyframes twinkle {
+    0%, 100% { opacity: 0.2; }
+    50% { opacity: 0.5; }
+}
+
+.login-container {
+    position: relative;
+    z-index: 1;
+    margin: auto;
+    padding: 40px;
+    width: min(440px, 92vw);
+    background: linear-gradient(180deg, rgba(45, 26, 74, 0.85), rgba(26, 15, 46, 0.9));
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-xl);
+    backdrop-filter: blur(20px);
+    box-shadow: var(--shadow-lg), 0 0 80px rgba(147, 51, 234, 0.2);
+    max-height: 92vh;
+    overflow-y: auto;
+}
+
+.login-header {
+    text-align: center;
+    margin-bottom: 28px;
+}
+
+.login-logo {
+    filter: drop-shadow(0 0 15px rgba(240, 192, 96, 0.6));
+    margin-bottom: 12px;
+}
+
+.login-title {
+    font-family: var(--font-display);
+    font-size: 32px;
+    font-weight: 900;
+    color: var(--gold);
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+}
+
+.login-tagline {
+    color: var(--text-muted);
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.login-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 24px;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 4px;
+    border-radius: var(--radius-md);
+}
+
+.tab-btn {
+    flex: 1;
+    padding: 10px;
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: var(--radius-sm);
+    transition: all 0.2s;
+}
+
+.tab-btn:hover {
+    color: var(--text);
+}
+
+.tab-btn.active {
+    background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+    color: var(--bg-deep);
+    box-shadow: 0 2px 10px rgba(240, 192, 96, 0.3);
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.form-group label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    padding: 12px 14px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-md);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 15px;
+    transition: all 0.2s;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--gold);
+    background: rgba(0, 0, 0, 0.5);
+    box-shadow: 0 0 0 3px rgba(240, 192, 96, 0.15);
+}
+
+.form-group input::placeholder {
+    color: var(--text-dim);
+}
+
+.login-help {
+    text-align: center;
+    font-size: 12px;
+    color: var(--text-dim);
+    margin-top: 8px;
+}
+
+.teacher-setup-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-top: 18px;
+    padding: 18px;
+    border: 1px solid rgba(240, 192, 96, 0.28);
+    border-radius: var(--radius-md);
+    background: rgba(0, 0, 0, 0.18);
+}
+.teacher-setup-panel[hidden],
+#teacher-setup-form[hidden],
+#login-form[hidden] { display: none !important; }
+.teacher-setup-message {
+    color: var(--text);
+    font-size: 13px;
+    text-align: center;
+}
+.teacher-setup-panel .login-help { margin: 0; }
+.teacher-setup-panel .btn-ghost {
+    padding: 10px 16px;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-md);
+    color: var(--text-muted);
+    background: transparent;
+    cursor: pointer;
+}
+
+/* ============================================
+   BOTÕES
+   ============================================ */
+.btn-primary {
+    padding: 14px 24px;
+    background: linear-gradient(135deg, var(--gold-dark) 0%, var(--gold) 50%, var(--gold-light) 100%);
+    border: none;
+    border-radius: var(--radius-md);
+    color: #1a0f2e;
+    font-family: var(--font-display);
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 4px 12px rgba(240, 192, 96, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-primary::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    transition: left 0.6s;
+}
+
+.btn-primary:hover::before {
+    left: 100%;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(240, 192, 96, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+}
+
+.btn-primary.btn-large {
+    padding: 16px 32px;
+    font-size: 16px;
+}
+
+.btn-secondary {
+    padding: 12px 20px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-md);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: var(--gold);
+}
+
+.btn-ghost {
+    padding: 10px 16px;
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-family: var(--font-body);
+    font-size: 13px;
+    cursor: pointer;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transition: color 0.2s;
+}
+
+.btn-ghost:hover {
+    color: var(--gold);
+}
+
+/* ============================================
+   CHARACTER CREATION SCREEN
+   ============================================ */
+#character-screen {
+    background: linear-gradient(135deg, #0a0514 0%, #1a0f2e 50%, #2a1a4a 100%);
+    overflow-y: auto;
+}
+
+.character-container {
+    max-width: 1000px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 32px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    min-height: 100%;
+}
+
+.character-header {
+    text-align: center;
+}
+
+.screen-title {
+    font-family: var(--font-display);
+    font-size: 32px;
+    color: var(--gold);
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+}
+
+.screen-subtitle {
+    color: var(--text-muted);
+    font-size: 14px;
+}
+
+.character-main {
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 32px;
+    align-items: start;
+}
+
+@media (max-width: 768px) {
+    .character-main {
+        grid-template-columns: 1fr;
+    }
+}
+
+.character-preview {
+    position: sticky;
+    top: 20px;
+    background: linear-gradient(180deg, rgba(45, 26, 74, 0.6), rgba(26, 15, 46, 0.8));
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-xl);
+    padding: 24px;
+    text-align: center;
+    box-shadow: var(--shadow-md);
+}
+
+#character-canvas {
+    display: block;
+    margin: 0 auto;
+    background: radial-gradient(ellipse at center bottom, rgba(240, 192, 96, 0.15), transparent 60%);
+    border-radius: var(--radius-lg);
+    max-width: 100%;
+    height: auto;
+}
+
+.character-badge {
+    margin-top: 16px;
+    padding: 10px 20px;
+    background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+    color: var(--bg-deep);
+    border-radius: 999px;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 1px;
+    display: inline-block;
+    box-shadow: var(--shadow-md);
+}
+
+.character-options {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.option-group {
+    background: linear-gradient(180deg, rgba(45, 26, 74, 0.5), rgba(26, 15, 46, 0.6));
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 18px;
+}
+
+.option-label {
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--gold);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 12px;
+}
+
+.avatar-choice {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.avatar-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 14px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 2px solid var(--border);
+    border-radius: var(--radius-md);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.avatar-btn:hover {
+    border-color: var(--gold);
+    transform: translateY(-2px);
+}
+
+.avatar-btn.active {
+    border-color: var(--gold);
+    background: rgba(240, 192, 96, 0.1);
+    box-shadow: 0 0 20px rgba(240, 192, 96, 0.3);
+}
+
+.avatar-preview-mini {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    position: relative;
+}
+
+.avatar-preview-mini.female {
+    background: radial-gradient(circle at 30% 30%, #ffcbb3, #e8a080);
+}
+
+.avatar-preview-mini.female::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background:
+        radial-gradient(circle at 34% 56%, #1a0f08 0 2.5px, transparent 3px),
+        radial-gradient(circle at 66% 56%, #1a0f08 0 2.5px, transparent 3px),
+        radial-gradient(ellipse 18px 6px at 50% 76%, transparent 0 60%, rgba(120,50,40,0.0) 61%),
+        radial-gradient(ellipse 62% 40% at 50% 2%, #3b1f0e 0 98%, transparent 100%),
+        linear-gradient(90deg, #3b1f0e 0 14%, transparent 14% 86%, #3b1f0e 86% 100%);
+}
+
+.avatar-preview-mini.male {
+    background: radial-gradient(circle at 30% 30%, #ffcbb3, #e8a080);
+}
+
+.avatar-preview-mini.male::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background:
+        radial-gradient(circle at 34% 56%, #1a0f08 0 2.5px, transparent 3px),
+        radial-gradient(circle at 66% 56%, #1a0f08 0 2.5px, transparent 3px),
+        radial-gradient(ellipse 60% 34% at 50% 4%, #2a1810 0 98%, transparent 100%);
+}
+
+.color-picker {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.color-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--c);
+    border: 3px solid var(--border);
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+}
+
+.color-btn:hover {
+    transform: scale(1.1);
+    border-color: var(--text);
+}
+
+.color-btn.active {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 2px var(--bg-dark), 0 0 0 4px var(--gold);
+}
+
+.accessory-choice {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+}
+
+.accessory-btn {
+    padding: 10px 14px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.accessory-btn:hover {
+    border-color: var(--gold);
+    background: rgba(240, 192, 96, 0.05);
+}
+
+.accessory-btn.active {
+    border-color: var(--gold);
+    background: rgba(240, 192, 96, 0.15);
+    color: var(--gold-light);
+}
+
+.character-footer {
+    display: flex;
+    justify-content: center;
+    padding: 20px 0;
+}
+
+/* ============================================
+   INTRO SCREEN
+   ============================================ */
+#intro-screen {
+    background: #000;
+    align-items: center;
+    justify-content: center;
+}
+
+.intro-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.intro-vignette {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+        radial-gradient(ellipse at center, transparent 20%, rgba(0, 0, 0, 0.8) 80%),
+        linear-gradient(180deg, #1a0f2e, #0a0514);
+}
+
+.intro-stars {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+        radial-gradient(2px 2px at 20% 30%, white, transparent),
+        radial-gradient(1px 1px at 60% 70%, white, transparent),
+        radial-gradient(1px 1px at 40% 20%, white, transparent),
+        radial-gradient(2px 2px at 80% 50%, #f0c060, transparent),
+        radial-gradient(1px 1px at 90% 80%, white, transparent),
+        radial-gradient(1px 1px at 15% 85%, white, transparent),
+        radial-gradient(2px 2px at 50% 50%, #f0c060, transparent),
+        radial-gradient(1px 1px at 25% 65%, white, transparent);
+    background-size: 400px 400px;
+    opacity: 0.6;
+    animation: twinkle 4s ease-in-out infinite;
+}
+
+.intro-content {
+    position: relative;
+    z-index: 1;
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    gap: 24px;
+}
+
+.intro-title {
+    font-family: var(--font-display);
+    font-size: 36px;
+    color: var(--gold);
+    letter-spacing: 3px;
+    text-shadow: 0 0 30px rgba(240, 192, 96, 0.6);
+    animation: fadeInUp 1s ease;
+}
+
+.intro-text {
+    font-size: 17px;
+    line-height: 1.8;
+    color: var(--text);
+    min-height: 180px;
+}
+
+.intro-text .typed-char {
+    opacity: 0;
+    animation: fadeIn 0.05s forwards;
+}
+
+@keyframes fadeIn {
+    to { opacity: 1; }
+}
+
+/* ============================================
+   RESPONSIVIDADE GERAL
+   ============================================ */
+@media (max-width: 480px) {
+    .login-title {
+        font-size: 26px;
+    }
+    .screen-title {
+        font-size: 24px;
+    }
+    .intro-title {
+        font-size: 26px;
+    }
+    .intro-text {
+        font-size: 15px;
+    }
+}
