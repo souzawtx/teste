@@ -1,0 +1,17 @@
+VERIFICAÇÕES REALIZADAS NESTA CÓPIA
+
+1. Sintaxe do servidor e dos módulos JavaScript: passou com npm run check.
+2. Inicialização do servidor: passou em porta isolada de teste.
+3. Endpoint /api/health: respondeu status OK.
+4. Primeiro cadastro de professora no computador servidor: passou.
+5. Cadastro/acesso de estudante com código de turma 8ANO-B: passou.
+6. Salvamento do avatar do estudante: passou.
+7. Salvamento do progresso (XP, corações e missão concluída): passou.
+8. Registro de atividade/missão: passou.
+9. Consulta do ranking do estudante: passou.
+10. Consulta dos dados pelo painel da professora: passou.
+11. Salvamento de missão personalizada pela professora: passou.
+
+LIMITAÇÃO DO TESTE
+Não foi possível concluir teste visual automatizado de ponta a ponta no navegador neste ambiente.
+Faça uma conferência manual das telas no seu computador antes de usar com uma turma.

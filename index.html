@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#1a0f2e">
+    <!-- Se o projeto for aberto por engano no Live Server (porta 5500), redireciona para o servidor da aplicação. -->
+    <script>
+        (function () {
+            if (window.location.port === '5500') {
+                var appUrl = new URL(window.location.href);
+                appUrl.port = '4173';
+                window.location.replace(appUrl.toString());
+            }
+        })();
+    </script>
+    <title>Liga dos Leitores — Aventura Literária</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/game.css">
+    <link rel="stylesheet" href="css/ui.css">
+    <link rel="stylesheet" href="css/polish.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Inter:wght@400;500;600;700&family=MedievalSharp&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="app">
+        <!-- Tela de carregamento -->
+        <div id="loading-screen" class="screen active">
+            <div class="loading-content">
+                <div class="loading-logo">
+                    <svg viewBox="0 0 100 100" width="120" height="120">
+                        <defs>
+                            <linearGradient id="bookGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#f0c060"/>
+                                <stop offset="100%" stop-color="#c08030"/>
+                            </linearGradient>
+                        </defs>
+                        <path d="M20 25 L50 20 L80 25 L80 80 L50 75 L20 80 Z" fill="url(#bookGrad)" stroke="#4a2c1a" stroke-width="2"/>
+                        <line x1="50" y1="20" x2="50" y2="75" stroke="#4a2c1a" stroke-width="2"/>
+                        <circle cx="50" cy="47" r="6" fill="#1a0f2e"/>
+                        <path d="M44 47 L50 42 L56 47 L50 52 Z" fill="#f0c060"/>
+                    </svg>
+                </div>
+                <h1 class="loading-title">Liga dos Leitores</h1>
+                <p class="loading-subtitle">Preparando sua aventura literária...</p>
+                <div class="loading-bar">
+                    <div class="loading-progress" id="loading-progress"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tela de login -->
+        <div id="login-screen" class="screen">
+            <div class="login-backdrop"></div>
+            <div class="login-container">
+                <div class="login-header">
+                    <svg viewBox="0 0 100 100" width="80" height="80" class="login-logo">
+                        <defs>
+                            <linearGradient id="bookGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#f0c060"/>
+                                <stop offset="100%" stop-color="#c08030"/>
+                            </linearGradient>
+                        </defs>
+                        <path d="M20 25 L50 20 L80 25 L80 80 L50 75 L20 80 Z" fill="url(#bookGrad2)" stroke="#4a2c1a" stroke-width="2"/>
+                        <line x1="50" y1="20" x2="50" y2="75" stroke="#4a2c1a" stroke-width="2"/>
+                        <circle cx="50" cy="47" r="6" fill="#1a0f2e"/>
+                    </svg>
+                    <h1 class="login-title">Liga dos Leitores</h1>
+                    <p class="login-tagline">Explore mundos literários. Decifre mistérios. Torne-se uma lenda.</p>
+                </div>
+
+                <div class="login-tabs">
+                    <button class="tab-btn active" data-tab="student">Estudante</button>
+                    <button class="tab-btn" data-tab="teacher">Professora</button>
+                </div>
+
+                <form id="login-form" class="login-form">
+                    <div class="form-group">
+                        <label for="username">Nome de aventureiro</label>
+                        <input type="text" id="username" required placeholder="Como você gostaria de ser chamado?" autocomplete="username">
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Senha mágica</label>
+                        <input type="password" id="password" required placeholder="Mínimo 8 caracteres" minlength="8" autocomplete="current-password">
+                    </div>
+                    <div class="form-group" id="class-group">
+                        <label for="class-code">Código da turma</label>
+                        <input type="text" id="class-code" list="class-code-options" placeholder="Ex: 8ANO-B (fornecido pela professora)" autocomplete="off"><datalist id="class-code-options"></datalist>
+                        <small class="form-help">Informe o código da sua turma para participar do ranking coletivo. No retorno, use o mesmo código.</small>
+                    </div>
+                    <button type="submit" class="btn-primary">Entrar ou criar conta</button>
+                    <p class="login-help" id="login-help">Primeiro acesso: informe um nome de usuário e uma senha com pelo menos 8 caracteres para criar sua conta de estudante. Nos próximos acessos, use os mesmos dados.</p>
+                </form>
+
+                <section class="teacher-setup-panel" id="teacher-setup-panel" hidden aria-live="polite">
+                    <p class="teacher-setup-message" id="teacher-setup-message">Ainda não existe uma conta de professora neste servidor.</p>
+                    <button type="button" class="btn-primary" id="teacher-setup-open">Configurar primeiro acesso da professora</button>
+                    <form id="teacher-setup-form" class="login-form" hidden>
+                        <div class="form-group">
+                            <label for="teacher-setup-username">Usuário da professora</label>
+                            <input id="teacher-setup-username" type="text" minlength="3" maxlength="32" autocomplete="username" required placeholder="Ex.: professora">
+                        </div>
+                        <div class="form-group">
+                            <label for="teacher-setup-password">Criar senha</label>
+                            <input id="teacher-setup-password" type="password" minlength="10" maxlength="128" autocomplete="new-password" required placeholder="Pelo menos 10 caracteres">
+                        </div>
+                        <div class="form-group">
+                            <label for="teacher-setup-confirm">Confirmar senha</label>
+                            <input id="teacher-setup-confirm" type="password" minlength="10" maxlength="128" autocomplete="new-password" required placeholder="Digite a senha novamente">
+                        </div>
+                        <button type="submit" class="btn-primary" id="teacher-setup-submit">Criar acesso e entrar</button>
+                        <button type="button" class="btn-ghost" id="teacher-setup-cancel">Voltar</button>
+                    </form>
+                    <p class="login-help">Por segurança, a primeira conta só pode ser criada no próprio computador que executa o servidor. Guarde a senha e não a compartilhe com estudantes.</p>
+                </section>
+            </div>
+        </div>
+
+        <!-- Tela de criação do personagem -->
+        <div id="character-screen" class="screen">
+            <div class="character-container">
+                <header class="character-header">
+                    <h2 class="screen-title">Crie seu Aventureiro</h2>
+                    <p class="screen-subtitle">Escolha e personalize o personagem que percorrerá os mundos literários.</p>
+                </header>
+
+                <div class="character-main">
+                    <div class="character-preview">
+                        <canvas id="character-canvas" width="300" height="400"></canvas>
+                        <div class="character-badge">
+                            <span id="char-name-display">Aventureiro</span>
+                        </div>
+                    </div>
+
+                    <div class="character-options">
+                        <div class="option-group">
+                            <label class="option-label">Avatar</label>
+                            <div class="avatar-choice">
+                                <button class="avatar-btn active" data-gender="female">
+                                    <div class="avatar-preview-mini female"></div>
+                                    <span>Feminino</span>
+                                </button>
+                                <button class="avatar-btn" data-gender="male">
+                                    <div class="avatar-preview-mini male"></div>
+                                    <span>Masculino</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="option-group">
+                            <label class="option-label" for="char-name">Nome do personagem</label>
+                            <input type="text" id="char-name" placeholder="Ex: Alice, Felipe, Zara..." maxlength="20">
+                        </div>
+
+                        <div class="option-group">
+                            <label class="option-label">Cor da roupa</label>
+                            <div class="color-picker" data-target="outfit">
+                                <button class="color-btn active" style="--c:#7c3aed" data-color="#7c3aed"></button>
+                                <button class="color-btn" style="--c:#dc2626" data-color="#dc2626"></button>
+                                <button class="color-btn" style="--c:#2563eb" data-color="#2563eb"></button>
+                                <button class="color-btn" style="--c:#059669" data-color="#059669"></button>
+                                <button class="color-btn" style="--c:#d97706" data-color="#d97706"></button>
+                                <button class="color-btn" style="--c:#db2777" data-color="#db2777"></button>
+                            </div>
+                        </div>
+
+                        <div class="option-group">
+                            <label class="option-label">Cor do cabelo</label>
+                            <div class="color-picker" data-target="hair">
+                                <button class="color-btn active" style="--c:#2a1810" data-color="#2a1810"></button>
+                                <button class="color-btn" style="--c:#5c3317" data-color="#5c3317"></button>
+                                <button class="color-btn" style="--c:#8b4513" data-color="#8b4513"></button>
+                                <button class="color-btn" style="--c:#d4a017" data-color="#d4a017"></button>
+                                <button class="color-btn" style="--c:#b22222" data-color="#b22222"></button>
+                                <button class="color-btn" style="--c:#9333ea" data-color="#9333ea"></button>
+                            </div>
+                        </div>
+
+                        <div class="option-group">
+                            <label class="option-label">Tom de pele</label>
+                            <div class="color-picker" data-target="skin">
+                                <button class="color-btn" style="--c:#fde7cd" data-color="#fde7cd"></button>
+                                <button class="color-btn active" style="--c:#f1c295" data-color="#f1c295"></button>
+                                <button class="color-btn" style="--c:#d19968" data-color="#d19968"></button>
+                                <button class="color-btn" style="--c:#a06d3f" data-color="#a06d3f"></button>
+                                <button class="color-btn" style="--c:#6b4423" data-color="#6b4423"></button>
+                                <button class="color-btn" style="--c:#3d2817" data-color="#3d2817"></button>
+                            </div>
+                        </div>
+
+                        <div class="option-group">
+                            <label class="option-label">Acessório inicial</label>
+                            <div class="accessory-choice">
+                                <button class="accessory-btn active" data-accessory="none">Nenhum</button>
+                                <button class="accessory-btn" data-accessory="hat">Chapéu</button>
+                                <button class="accessory-btn" data-accessory="glasses">Óculos</button>
+                                <button class="accessory-btn" data-accessory="backpack">Mochila</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="character-footer">
+                    <button id="confirm-character" class="btn-primary btn-large">Começar Aventura</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tela de introdução narrativa -->
+        <div id="intro-screen" class="screen">
+            <div class="intro-container">
+                <div class="intro-vignette"></div>
+                <div class="intro-content">
+                    <div class="intro-stars"></div>
+                    <h2 class="intro-title">Bem-vindo à Liga dos Leitores!</h2>
+                    <div class="intro-text" id="intro-text"></div>
+                    <button id="skip-intro" class="btn-ghost">Pular introdução</button>
+                    <button id="start-adventure" class="btn-primary btn-large" style="display:none">Iniciar Jornada</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tela do jogo (mapa principal e mundos) -->
+        <div id="game-screen" class="screen">
+            <canvas id="game-canvas"></canvas>
+
+            <!-- HUD do jogo -->
+            <div class="hud">
+                <div class="hud-top-left">
+                    <div class="hud-avatar" id="hud-avatar">
+                        <canvas id="hud-avatar-canvas" width="48" height="48"></canvas>
+                    </div>
+                    <div class="hud-info">
+                        <div class="hud-name" id="hud-name">Aventureiro</div>
+                        <div class="hud-level">
+                            <span class="level-badge" id="hud-level">Nv.1</span>
+                            <span class="level-title" id="hud-title">Aprendiz</span>
+                        </div>
+                        <div class="xp-bar">
+                            <div class="xp-fill" id="hud-xp-fill"></div>
+                            <span class="xp-text" id="hud-xp-text">0 / 100 XP</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="hud-top-right">
+                    <div class="hearts" id="hud-hearts">
+                        <span class="heart">♥</span>
+                        <span class="heart">♥</span>
+                        <span class="heart">♥</span>
+                    </div>
+                    <div class="coins">
+                        <span class="coin-icon">◉</span>
+                        <span id="hud-coins">0</span>
+                    </div>
+                </div>
+
+                <div class="hud-location" id="hud-location">Praça da Liga</div>
+
+                <!-- Botões superiores -->
+                <div class="hud-menu-btns">
+                    <button class="hud-btn" id="btn-menu" title="Menu" aria-label="Abrir menu">☰</button>
+                    <button class="hud-btn" id="btn-level-trail" title="Minha trilha de níveis" aria-label="Ver minha trilha de níveis">🛤️</button>
+                    <button class="hud-btn" id="btn-ranking" title="Ranking da Liga" aria-label="Ver ranking da Liga">🏆</button>
+                    <button class="hud-btn" id="btn-inventory" title="Inventário" aria-label="Abrir inventário">🎒</button>
+                    <button class="hud-btn" id="btn-missions" title="Missões" aria-label="Abrir missões">📜</button>
+                </div>
+
+                <!-- Dica de interação -->
+                <div class="interaction-hint" id="interaction-hint">
+                    <span class="hint-key">E</span>
+                    <span class="hint-text">Interagir</span>
+                </div>
+
+                <!-- Controles touch -->
+                <div class="touch-controls" id="touch-controls">
+                    <div class="joystick-area" id="joystick-area">
+                        <div class="joystick-base">
+                            <div class="joystick-knob" id="joystick-knob"></div>
+                        </div>
+                    </div>
+                    <button class="touch-interact" id="touch-interact">E</button>
+                </div>
+            </div>
+
+            <!-- Diálogo -->
+            <div class="dialog-box" id="dialog-box">
+                <div class="dialog-portrait" id="dialog-portrait"></div>
+                <div class="dialog-content">
+                    <div class="dialog-name" id="dialog-name">Narrador</div>
+                    <div class="dialog-text" id="dialog-text"></div>
+                    <div class="dialog-options" id="dialog-options"></div>
+                    <div class="dialog-continue" id="dialog-continue">Pressione <kbd>E</kbd> ou toque para continuar ▸</div>
+                </div>
+            </div>
+
+            <!-- Modal de missão / pergunta -->
+            <div class="mission-modal" id="mission-modal">
+                <div class="mission-content">
+                    <div class="mission-header">
+                        <div class="mission-badge" id="mission-badge">Missão</div>
+                        <h3 class="mission-title" id="mission-title">Título da Missão</h3>
+                        <button class="modal-close" id="mission-close">×</button>
+                    </div>
+                    <div class="mission-body" id="mission-body"></div>
+                    <div class="mission-footer" id="mission-footer"></div>
+                </div>
+            </div>
+
+            <!-- Menu de pausa -->
+            <div class="pause-menu" id="pause-menu">
+                <div class="pause-content">
+                    <h2>Menu</h2>
+                    <button class="menu-item" data-action="resume">▸ Voltar ao Jogo</button>
+                    <button class="menu-item" data-action="missions">▸ Diário de Missões</button>
+                    <button class="menu-item" data-action="library">▸ Biblioteca</button>
+                    <button class="menu-item" data-action="achievements">▸ Conquistas</button>
+                    <button class="menu-item" data-action="levels">▸ Minha Trilha de Níveis</button>
+                    <button class="menu-item" data-action="ranking">▸ Ranking da Liga</button>
+                    <button class="menu-item" data-action="assessment">▸ Avaliação de leitura</button>
+                    <button class="menu-item" data-action="character">▸ Personalizar Avatar</button>
+                    <button class="menu-item" data-action="save">▸ Salvar e Sair</button>
+                    <div class="pause-footer">
+                        <small>Liga dos Leitores — v2.3.1</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Painel genérico (biblioteca, conquistas, missões, inventário) -->
+            <div class="panel-modal" id="panel-modal">
+                <div class="panel-content">
+                    <div class="panel-header">
+                        <h3 id="panel-title">Painel</h3>
+                        <button class="modal-close" id="panel-close">×</button>
+                    </div>
+                    <div class="panel-body" id="panel-body"></div>
+                </div>
+            </div>
+
+            <!-- Notificações flutuantes -->
+            <div class="toast-container" id="toast-container"></div>
+
+            <!-- Tela de recompensa -->
+            <div class="reward-overlay" id="reward-overlay">
+                <div class="reward-content">
+                    <div class="reward-glow"></div>
+                    <div class="reward-icon" id="reward-icon">🏆</div>
+                    <h2 id="reward-title">Missão Concluída!</h2>
+                    <div class="reward-stats" id="reward-stats"></div>
+                    <button class="btn-primary" id="reward-continue">Continuar</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Painel administrativo (professora) -->
+        <div id="teacher-screen" class="screen">
+            <div class="teacher-container">
+                <aside class="teacher-sidebar">
+                    <div class="teacher-brand">
+                        <div class="brand-icon">📚</div>
+                        <div>
+                            <div class="brand-title">Liga dos Leitores</div>
+                            <div class="brand-subtitle">Painel Pedagógico</div>
+                        </div>
+                    </div>
+                    <nav class="teacher-nav">
+                        <button class="nav-item active" data-view="dashboard">
+                            <span class="nav-icon">📊</span>
+                            <span>Visão Geral</span>
+                        </button>
+                        <button class="nav-item" data-view="students">
+                            <span class="nav-icon">👥</span>
+                            <span>Estudantes</span>
+                        </button>
+                        <button class="nav-item" data-view="missions">
+                            <span class="nav-icon">📜</span>
+                            <span>Missões</span>
+                        </button>
+                        <button class="nav-item" data-view="worlds">
+                            <span class="nav-icon">🗺️</span>
+                            <span>Mundos</span>
+                        </button>
+                        <button class="nav-item" data-view="reports">
+                            <span class="nav-icon">📈</span>
+                            <span>Relatórios</span>
+                        </button>
+                        <button class="nav-item" data-view="settings">
+                            <span class="nav-icon">⚙️</span>
+                            <span>Configurações</span>
+                        </button>
+                    </nav>
+                    <div class="teacher-footer">
+                        <button class="btn-ghost" id="teacher-logout">Sair</button>
+                    </div>
+                </aside>
+
+                <main class="teacher-main">
+                    <header class="teacher-header">
+                        <h2 id="teacher-view-title">Visão Geral</h2>
+                        <div class="teacher-user">
+                            <span id="teacher-name">Professora</span>
+                            <div class="teacher-avatar">P</div>
+                        </div>
+                    </header>
+                    <section class="teacher-view" id="teacher-view"></section>
+                </main>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/api.js?v=2.3.1"></script>
+    <script src="js/storage.js?v=2.3.1"></script>
+    <script src="js/characters.js?v=2.3.1"></script>
+    <script src="js/worlds.js?v=2.3.1"></script>
+    <script src="js/missions.js?v=2.3.1"></script>
+    <script src="js/ui.js?v=2.3.1"></script>
+    <script src="js/game.js?v=2.3.1"></script>
+    <script src="js/teacher.js?v=2.3.1"></script>
+    <script src="js/app.js?v=2.3.1"></script>
+</body>
+</html>

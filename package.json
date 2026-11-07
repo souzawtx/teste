@@ -1,0 +1,13 @@
+{
+  "name": "liga-dos-leitores",
+  "version": "2.3.1",
+  "private": true,
+  "description": "Plataforma gamificada de aventura e leitura literária",
+  "scripts": {
+    "start": "node server.js",
+    "check": "node --check server.js && node --check js/api.js && node --check js/storage.js && node --check js/app.js && node --check js/characters.js && node --check js/game.js && node --check js/ui.js && node --check js/teacher.js && node --check js/missions.js && node --check js/worlds.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

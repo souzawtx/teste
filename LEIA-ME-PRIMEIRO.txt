@@ -1,0 +1,57 @@
+LIGA DOS LEITORES — COMO ABRIR
+Versão do projeto: 2.3.1
+
+IMPORTANTE
+Este projeto é um site com servidor local. Não basta dar dois cliques em index.html.
+É necessário ter Node.js 18 ou superior instalado.
+
+NO LINUX
+1. Extraia a pasta inteira do ZIP.
+2. Entre na pasta Liga-dos-Leitores-2.3.1.
+3. Clique com o botão direito em INICIAR-LIGA.sh e escolha Executar como programa.
+   Se preferir usar o terminal, execute: ./INICIAR-LIGA.sh
+4. O navegador deve abrir em http://localhost:4173.
+5. Para parar o site, volte ao terminal e pressione Ctrl+C.
+
+NO WINDOWS
+1. Extraia a pasta inteira do ZIP.
+2. Entre na pasta Liga-dos-Leitores-2.3.1.
+3. Dê dois cliques em INICIAR-LIGA.bat.
+4. O navegador deve abrir em http://localhost:4173.
+5. Para parar o site, feche a janela do terminal.
+
+PRIMEIRO ACESSO DA PROFESSORA
+1. Com o site aberto no computador que executa o servidor, selecione Professora.
+2. Clique em Configurar primeiro acesso da professora.
+3. Crie um usuário e uma senha forte (mínimo de 10 caracteres) e guarde-os.
+4. Depois, entre sempre com esses mesmos dados.
+
+PRIMEIRO ACESSO DO ESTUDANTE
+1. Selecione Estudante.
+2. Crie usuário e senha (mínimo de 8 caracteres).
+3. Para entrar no ranking da turma, informe o código 8ANO-B (ou outro código criado pela professora).
+4. Personalize o avatar e comece a jornada.
+
+SE A PÁGINA NÃO ABRIR
+- Não abra index.html diretamente.
+- Não use o Live Server do VS Code na porta 5500. A plataforma precisa da porta 4173.
+- Confira se Node.js 18+ está instalado.
+- Se a porta 4173 estiver ocupada, feche o servidor antigo ou altere PORT no arquivo .env.
+- No terminal, dentro da pasta, você pode executar: npm run check
+
+O QUE ESTA VERSÃO CONTÉM
+- Praça da Liga e criação de avatar personalizável.
+- Mundo jogável de A Metamorfose.
+- Missões, quizzes, dicas, XP, níveis, moedas e corações.
+- Painel da professora com estudantes, missões, configurações e relatórios.
+- Registros de tentativas e avaliações inicial/posterior.
+
+ESCOPO LITERÁRIO
+O relatório menciona seis obras no repertório planejado. Nesta versão, A Metamorfose é o mundo jogável. O Diário de Anne Frank, Vidas Secas, Iracema, A Cartomante e O Alienista são possibilidades de expansão/portais ainda bloqueados, não mundos completos.
+
+DADOS E SEGURANÇA
+- O banco de dados é criado automaticamente na pasta data/ quando o servidor inicia.
+- Não compartilhe a pasta data/: ela pode conter contas e registros de estudantes.
+- Faça cópias de segurança da pasta data/ com o servidor parado.
+- A versão foi preparada para execução local/rede controlada. Não publique diretamente na internet.
+- Para uso com estudantes menores, mantenha acesso restrito e siga os procedimentos éticos e de proteção de dados da escola.
